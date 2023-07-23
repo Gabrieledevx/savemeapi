@@ -1,29 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Saveme.Models;
+namespace savemeapi.Models;
 
 public partial class Usuario
 {
     public int Id { get; set; }
 
-    public string? Nombre { get; set; }
+    public string? Cedula { get; set; }
+
+    public string? Nombres { get; set; }
+
+    public string? Apellidos { get; set; }
 
     public string? CorreoElectronico { get; set; }
 
     public string? Ubicacion { get; set; }
 
-    public virtual ICollection<Adopcion> Adopcions { get; set; } = new List<Adopcion>();
+    public string? Celular { get; set; }
 
-    public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
+    public string? Clave { get; set; }
+
+    public int? TipoDeUsuario { get; set; }
+
+    public virtual ICollection<Adopcion> Adopcions { get; set; } = new List<Adopcion>();
 
     public virtual ICollection<Donacion> Donacions { get; set; } = new List<Donacion>();
 
     public virtual ICollection<Participanteevento> Participanteeventos { get; set; } = new List<Participanteevento>();
 
-    public virtual ICollection<Perfilanimalespecial> Perfilanimalespecials { get; set; } = new List<Perfilanimalespecial>();
+    public virtual ICollection<Rescate> Rescates { get; set; } = new List<Rescate>();
 
-    public virtual ICollection<Perfilanimal> Perfilanimals { get; set; } = new List<Perfilanimal>();
-
-    public virtual ICollection<Valoracion> Valoracions { get; set; } = new List<Valoracion>();
+    public virtual TiposUsuario? TipoDeUsuarioNavigation { get; set; }
 }

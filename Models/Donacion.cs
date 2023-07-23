@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Saveme.Models;
+namespace savemeapi.Models;
 
 public partial class Donacion
 {

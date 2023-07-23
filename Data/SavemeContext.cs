@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Saveme.Models;
+using savemeapi.Models;
 
-namespace Saveme.Data;
+namespace savemeapi.Data;
 
 public partial class SavemeContext : DbContext
 {
@@ -16,29 +16,19 @@ public partial class SavemeContext : DbContext
 
     public virtual DbSet<Animal> Animals { get; set; }
 
-    public virtual DbSet<Animalespecial> Animalespecials { get; set; }
-
-    public virtual DbSet<Comentario> Comentarios { get; set; }
-
     public virtual DbSet<Donacion> Donacions { get; set; }
 
     public virtual DbSet<Eventoadopcion> Eventoadopcions { get; set; }
 
     public virtual DbSet<Participanteevento> Participanteeventos { get; set; }
 
-    public virtual DbSet<Perfilanimal> Perfilanimals { get; set; }
+    public virtual DbSet<Rescate> Rescates { get; set; }
 
-    public virtual DbSet<Perfilanimalespecial> Perfilanimalespecials { get; set; }
-
-    public virtual DbSet<Proveedoradopcion> Proveedoradopcions { get; set; }
-
-    public virtual DbSet<Proveedorrescate> Proveedorrescates { get; set; }
+    public virtual DbSet<TiposUsuario> TiposUsuarios { get; set; }
 
     public virtual DbSet<Ubicacion> Ubicacions { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
-    public virtual DbSet<Valoracion> Valoracions { get; set; }
 
     public virtual DbSet<Veterinario> Veterinarios { get; set; }
 
@@ -99,67 +89,6 @@ public partial class SavemeContext : DbContext
             entity.Property(e => e.Tamano)
                 .HasMaxLength(255)
                 .HasColumnName("tamano");
-        });
-
-        modelBuilder.Entity<Animalespecial>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("animalespecial");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Discapacidad)
-                .HasMaxLength(255)
-                .HasColumnName("discapacidad");
-            entity.Property(e => e.Edad).HasColumnName("edad");
-            entity.Property(e => e.Especie)
-                .HasMaxLength(255)
-                .HasColumnName("especie");
-            entity.Property(e => e.NecesidadesEspecialesAdicionales)
-                .HasMaxLength(255)
-                .HasColumnName("necesidades_especiales_adicionales");
-            entity.Property(e => e.Personalidad)
-                .HasMaxLength(255)
-                .HasColumnName("personalidad");
-            entity.Property(e => e.Tamano)
-                .HasMaxLength(255)
-                .HasColumnName("tamano");
-        });
-
-        modelBuilder.Entity<Comentario>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("comentario");
-
-            entity.HasIndex(e => e.PerfilAnimalEspecialId, "perfil_animal_especial_id");
-
-            entity.HasIndex(e => e.PerfilAnimalId, "perfil_animal_id");
-
-            entity.HasIndex(e => e.UsuarioId, "usuario_id");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Contenido)
-                .HasColumnType("text")
-                .HasColumnName("contenido");
-            entity.Property(e => e.FechaHora)
-                .HasColumnType("datetime")
-                .HasColumnName("fecha_hora");
-            entity.Property(e => e.PerfilAnimalEspecialId).HasColumnName("perfil_animal_especial_id");
-            entity.Property(e => e.PerfilAnimalId).HasColumnName("perfil_animal_id");
-            entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
-
-            entity.HasOne(d => d.PerfilAnimalEspecial).WithMany(p => p.Comentarios)
-                .HasForeignKey(d => d.PerfilAnimalEspecialId)
-                .HasConstraintName("comentario_ibfk_3");
-
-            entity.HasOne(d => d.PerfilAnimal).WithMany(p => p.Comentarios)
-                .HasForeignKey(d => d.PerfilAnimalId)
-                .HasConstraintName("comentario_ibfk_2");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Comentarios)
-                .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("comentario_ibfk_1");
         });
 
         modelBuilder.Entity<Donacion>(entity =>
@@ -235,110 +164,61 @@ public partial class SavemeContext : DbContext
                 .HasConstraintName("participanteevento_ibfk_2");
         });
 
-        modelBuilder.Entity<Perfilanimal>(entity =>
+        modelBuilder.Entity<Rescate>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => e.Idrescate).HasName("PRIMARY");
 
-            entity.ToTable("perfilanimal");
+            entity.ToTable("rescate");
 
-            entity.HasIndex(e => e.AnimalId, "animal_id");
+            entity.HasIndex(e => e.Idanimal, "fk_id_animal_idx");
 
-            entity.HasIndex(e => e.UsuarioId, "usuario_id");
+            entity.HasIndex(e => e.Idusuario, "fk_id_usuario_idx");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AnimalId).HasColumnName("animal_id");
-            entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
-                .HasColumnName("descripcion");
-            entity.Property(e => e.FechaPublicacion)
-                .HasColumnType("datetime")
-                .HasColumnName("fecha_publicacion");
+            entity.Property(e => e.Idrescate)
+                .ValueGeneratedNever()
+                .HasColumnName("idrescate");
+            entity.Property(e => e.ApellidoDeRescatista)
+                .HasMaxLength(45)
+                .HasColumnName("apellido de rescatista");
+            entity.Property(e => e.CelularDeRescatista)
+                .HasMaxLength(45)
+                .HasColumnName("celular de rescatista");
+            entity.Property(e => e.CorreoDeRescatista)
+                .HasMaxLength(45)
+                .HasColumnName("correo de rescatista");
+            entity.Property(e => e.DescripcionRescate)
+                .HasMaxLength(45)
+                .HasColumnName("descripcion rescate");
+            entity.Property(e => e.Idanimal).HasColumnName("idanimal");
+            entity.Property(e => e.Idusuario).HasColumnName("idusuario");
             entity.Property(e => e.Imagen)
-                .HasMaxLength(255)
+                .HasColumnType("blob")
                 .HasColumnName("imagen");
-            entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
+            entity.Property(e => e.NombreDeRescatista)
+                .HasMaxLength(45)
+                .HasColumnName("nombre de rescatista");
 
-            entity.HasOne(d => d.Animal).WithMany(p => p.Perfilanimals)
-                .HasForeignKey(d => d.AnimalId)
-                .HasConstraintName("perfilanimal_ibfk_1");
+            entity.HasOne(d => d.IdanimalNavigation).WithMany(p => p.Rescates)
+                .HasForeignKey(d => d.Idanimal)
+                .HasConstraintName("fk_id_animal");
 
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Perfilanimals)
-                .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("perfilanimal_ibfk_2");
+            entity.HasOne(d => d.IdusuarioNavigation).WithMany(p => p.Rescates)
+                .HasForeignKey(d => d.Idusuario)
+                .HasConstraintName("fk_id_usuario");
         });
 
-        modelBuilder.Entity<Perfilanimalespecial>(entity =>
+        modelBuilder.Entity<TiposUsuario>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("perfilanimalespecial");
+            entity.ToTable("tipos usuarios");
 
-            entity.HasIndex(e => e.AnimalEspecialId, "animal_especial_id");
-
-            entity.HasIndex(e => e.UsuarioId, "usuario_id");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AnimalEspecialId).HasColumnName("animal_especial_id");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
+                .HasMaxLength(100)
                 .HasColumnName("descripcion");
-            entity.Property(e => e.FechaPublicacion)
-                .HasColumnType("datetime")
-                .HasColumnName("fecha_publicacion");
-            entity.Property(e => e.Imagen)
-                .HasMaxLength(255)
-                .HasColumnName("imagen");
-            entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
-
-            entity.HasOne(d => d.AnimalEspecial).WithMany(p => p.Perfilanimalespecials)
-                .HasForeignKey(d => d.AnimalEspecialId)
-                .HasConstraintName("perfilanimalespecial_ibfk_1");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Perfilanimalespecials)
-                .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("perfilanimalespecial_ibfk_2");
-        });
-
-        modelBuilder.Entity<Proveedoradopcion>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("proveedoradopcion");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CorreoElectronico)
-                .HasMaxLength(255)
-                .HasColumnName("correo_electronico");
-            entity.Property(e => e.InformacionVerificacion)
-                .HasColumnType("text")
-                .HasColumnName("informacion_verificacion");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(255)
-                .HasColumnName("nombre");
-            entity.Property(e => e.Ubicacion)
-                .HasMaxLength(255)
-                .HasColumnName("ubicacion");
-        });
-
-        modelBuilder.Entity<Proveedorrescate>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("proveedorrescate");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CorreoElectronico)
-                .HasMaxLength(255)
-                .HasColumnName("correo_electronico");
-            entity.Property(e => e.InformacionVerificacion)
-                .HasColumnType("text")
-                .HasColumnName("informacion_verificacion");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(255)
-                .HasColumnName("nombre");
-            entity.Property(e => e.Ubicacion)
-                .HasMaxLength(255)
-                .HasColumnName("ubicacion");
         });
 
         modelBuilder.Entity<Ubicacion>(entity =>
@@ -368,50 +248,35 @@ public partial class SavemeContext : DbContext
 
             entity.ToTable("usuario");
 
+            entity.HasIndex(e => e.TipoDeUsuario, "fk_tipo_usuario_idx");
+
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Apellidos)
+                .HasMaxLength(45)
+                .HasColumnName("apellidos");
+            entity.Property(e => e.Cedula)
+                .HasMaxLength(45)
+                .HasColumnName("cedula");
+            entity.Property(e => e.Celular)
+                .HasMaxLength(20)
+                .HasColumnName("celular");
+            entity.Property(e => e.Clave)
+                .HasMaxLength(100)
+                .HasColumnName("clave");
             entity.Property(e => e.CorreoElectronico)
                 .HasMaxLength(255)
                 .HasColumnName("correo_electronico");
-            entity.Property(e => e.Nombre)
+            entity.Property(e => e.Nombres)
                 .HasMaxLength(255)
-                .HasColumnName("nombre");
+                .HasColumnName("nombres");
+            entity.Property(e => e.TipoDeUsuario).HasColumnName("tipo de usuario");
             entity.Property(e => e.Ubicacion)
                 .HasMaxLength(255)
                 .HasColumnName("ubicacion");
-        });
 
-        modelBuilder.Entity<Valoracion>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("valoracion");
-
-            entity.HasIndex(e => e.PerfilAnimalEspecialId, "perfil_animal_especial_id");
-
-            entity.HasIndex(e => e.PerfilAnimalId, "perfil_animal_id");
-
-            entity.HasIndex(e => e.UsuarioId, "usuario_id");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ComentarioAdicional)
-                .HasColumnType("text")
-                .HasColumnName("comentario_adicional");
-            entity.Property(e => e.PerfilAnimalEspecialId).HasColumnName("perfil_animal_especial_id");
-            entity.Property(e => e.PerfilAnimalId).HasColumnName("perfil_animal_id");
-            entity.Property(e => e.Puntuacion).HasColumnName("puntuacion");
-            entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
-
-            entity.HasOne(d => d.PerfilAnimalEspecial).WithMany(p => p.Valoracions)
-                .HasForeignKey(d => d.PerfilAnimalEspecialId)
-                .HasConstraintName("valoracion_ibfk_3");
-
-            entity.HasOne(d => d.PerfilAnimal).WithMany(p => p.Valoracions)
-                .HasForeignKey(d => d.PerfilAnimalId)
-                .HasConstraintName("valoracion_ibfk_2");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Valoracions)
-                .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("valoracion_ibfk_1");
+            entity.HasOne(d => d.TipoDeUsuarioNavigation).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.TipoDeUsuario)
+                .HasConstraintName("fk_tipo_usuario");
         });
 
         modelBuilder.Entity<Veterinario>(entity =>

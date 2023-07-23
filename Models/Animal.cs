@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Saveme.Models;
+namespace savemeapi.Models;
 
 public partial class Animal
 {
@@ -19,7 +19,7 @@ public partial class Animal
 
     public virtual ICollection<Adopcion> Adopcions { get; set; } = new List<Adopcion>();
 
-    public virtual ICollection<Perfilanimal> Perfilanimals { get; set; } = new List<Perfilanimal>();
+    public virtual ICollection<Rescate> Rescates { get; set; } = new List<Rescate>();
 
     public virtual ICollection<Visitasveterinario> Visitasveterinarios { get; set; } = new List<Visitasveterinario>();
 }
